@@ -1,0 +1,156 @@
+<h2 class="text-center pt-4 pb-4">TimeSheet</h2>
+<div class="row">
+  <div class="form-group col-md-4">
+    <label for="date">Date</label>
+    <div class="input-group">
+      <input id="date" class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="date" ngbDatepicker #dp="ngbDatepicker">
+      <button class="input-group-addon" (click)="dp.toggle()" type="button">
+          <img src="../../assets/img/calender-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
+      </button>
+    </div>
+  </div>
+  <div class="form-group offset-md-4 col-md-4">
+    <label for="date">Role</label>
+    <div class="input-group">
+      <select class="form-control" id="options" [(ngModel)]="options">
+        <option>Developer</option>
+        <option>HR</option>
+        <option>Manager</option>
+        <option>Client</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-12" *ngIf="options !== 'Developer'">
+    <span><strong>Developer: </strong>Danish</span>
+  </div>
+  <hr>
+  <div class="col-md-12">
+    <div class="progress" *ngIf="options === 'Developer'">
+      <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="progress" *ngIf="options === 'HR'">
+      <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 25%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="progress" *ngIf="options === 'Manager'">
+      <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 50%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="progress" *ngIf="options === 'Client'">
+      <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 75%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="progress" *ngIf="options === 'Success'">
+      <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+  </div>
+  <hr>
+  <div class="col-md-12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>MON</th>
+          <th>TUE</th>
+          <th>WED</th>
+          <th>THU</th>
+          <th>FRI</th>
+          <th>SAT</th>
+          <th>SUN</th>
+          <!-- <th>
+            <button type="submit" class="btn btn-primary float-right" (click)="open(content,'new')">Add New</button> 
+          </th> -->
+        </tr>
+      </thead>
+      <tbody *ngIf="options !== 'HR'">    
+          <tr *ngFor="let t of timeSheet?.projects; let i = index">
+            <th scope="row">{{  t.name }}</th>
+            <td (click)="open(content,'edit', 'mon', timeSheet, i)">{{ t.mon.totalHours }}</td>
+            <td (click)="open(content,'edit', 'tue', timeSheet, i)">{{ t.tue.totalHours }}</td>
+            <td (click)="open(content,'edit', 'wed', timeSheet, i)">{{ t.wed.totalHours }}</td>
+            <td (click)="open(content,'edit', 'thu', timeSheet, i)">{{ t.thu.totalHours }}</td>
+            <td (click)="open(content,'edit', 'fri', timeSheet, i)">{{ t.fri.totalHours }}</td>
+            <td (click)="open(content,'edit', 'sat', timeSheet, i)">{{ t.sat.totalHours }}</td>
+            <td (click)="open(content,'edit', 'sun', timeSheet, i)">{{ t.sun.totalHours }}</td>
+          </tr>
+      </tbody>
+      <tbody *ngIf="options === 'HR'">
+        <tr *ngFor="let t of timeSheet?.projects; let i = index">
+          <th scope="row">{{  t.name }}</th>
+          <td>
+            <span class="d-flex"> {{ t.mon.totalHours }} &nbsp;&nbsp; <input class="form-control hours" type="number" min="0" max="8"></span>
+          </td>
+          <td>
+            <span class="d-flex"> {{ t.tue.totalHours }}  &nbsp;&nbsp; <input class="form-control hours" type="number" min="0" max="8"></span>
+          </td>
+          <td>
+            <span class="d-flex"> {{ t.wed.totalHours }}  &nbsp;&nbsp; <input class="form-control hours" type="number" min="0" max="8"></span>
+          </td>
+          <td>
+            <span class="d-flex"> {{ t.thu.totalHours }}  &nbsp;&nbsp; <input class="form-control hours" type="number" min="0" max="8"></span>
+          </td>
+          <td>
+            <span class="d-flex"> {{ t.fri.totalHours }}  &nbsp;&nbsp; <input class="form-control hours" type="number" min="0" max="8"></span>
+          </td>
+          <td>
+            <span class="d-flex"> {{ t.sat.totalHours }}  &nbsp;&nbsp; <input class="form-control hours" type="number" min="0" max="8"></span>
+          </td>
+          <td>
+            <span class="d-flex"> {{ t.sun.totalHours }}  &nbsp;&nbsp; <input class="form-control hours" type="number" min="0" max="8"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-12"> 
+    <button type="button" class="btn btn-primary float-right" *ngIf="options === 'Developer'">Submit</button>
+    <button type="button" class="btn btn-primary float-right" *ngIf="options === 'HR'">Accept</button>
+    <button type="button" class="btn btn-primary float-right" *ngIf="options === 'Manager'">Approve</button>
+    <button type="button" class="btn btn-primary float-right" *ngIf="options === 'Client'">Authorize</button>
+  </div>
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Timesheet detail</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #detailForm="ngForm" (ngSubmit)="onSubmit(detailForm)">
+        <div class="form-group">
+          <label for="date">Date</label>
+          <div class="input-group">
+            <input id="date" class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="date" ngbDatepicker #dp="ngbDatepicker" disabled>
+            <button class="input-group-addon" (click)="dp.toggle()" type="button">
+                <img src="../../assets/img/calender-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="project">Project Name</label>
+          <div class="input-group">
+            <input class="form-control" type="text" id="project" name="project" [(ngModel)]="data.project" disabled>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="task">Task Description</label>
+          <div class="input-group">
+            <textarea rows="3" class="form-control" type="text" id="task" name="task" [(ngModel)]="data.task"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="hours">Working Hours</label>
+          <div class="input-group">
+            <input class="form-control" type="number" min="0" max="8" id="hours" name="hours" [(ngModel)]="data.hours">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary float-right">{{ mode }}</button>
+      </form>
+      <!-- <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+      </div> -->
+    </div>
+  </ng-template>
+</div>
+  
+
+
+
+  

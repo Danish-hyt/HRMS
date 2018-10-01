@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  RightAccount_URL : 'http://dev.rightaccount.zepto.work',
 };
