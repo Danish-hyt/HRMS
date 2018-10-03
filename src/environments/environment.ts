@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   RightAccount_URL : 'http://192.168.4.152:8079',
+  redirectURL: 'http://192.168.4.152:8079/login/aHJtcw=='
 };
 
 /*

@@ -3,15 +3,18 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const session = require('express-session');
+var cookieParser = require('cookie-parser');
+var path = require('path'); 
 
 const config = require('./config/config');
 const routes = require('./routes/routes');
 
 const app = express();
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:false }));
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '.././dist')));
 app.use(morgan('dev'));
 app.use(cors());
 app.use('/api', routes);

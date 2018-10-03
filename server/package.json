@@ -15,6 +15,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "lodash": "^4.17.11",
-    "oracledb": "^2.3.0"
+    "oracledb": "^2.1.2",
+    "public-ip": "^2.4.0"
   }
 }

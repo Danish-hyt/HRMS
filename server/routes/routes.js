@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const publicIp = require('public-ip');
+const ds = require('oracledb');
 
 const checkJwt = require('../verify-jwt/verify');
 const User = require('../model/user');
@@ -185,7 +187,7 @@ router.post('/edit/:id', async (req, res) => {
     }
 });
 
-router.get('/login/:tokken', (req, res) => {
+router.get('/login/:token', (req, res) => {
     console.log("------------------------");
     console.log(req.params.token);
     
@@ -193,9 +195,9 @@ router.get('/login/:tokken', (req, res) => {
     
         var user_agent = req.headers['user-agent'] || req.get('user-agent');
         var environment = null;
-        if (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'development') {
-            environment = 'dev';
-        }
+        // if (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'development') {
+        //     environment = 'dev';
+        // }
     
         var databaseLogLevel = 0;
         var databaseLogSave = 1;
@@ -208,9 +210,8 @@ router.get('/login/:tokken', (req, res) => {
     
         ds.getConnection(config.dbConfig, function(err, connection) {
             if (err) {
-                console.log("Error");
-                console.error(err.message);
-                return;
+                console.log("Error", err.message);
+                res.send(err);
         }
     
             console.log('-----------------------------------------');
@@ -293,30 +294,30 @@ router.get('/login/:tokken', (req, res) => {
                 console.log(result.outBinds);
                 console.log('-----------------------------------------');
                 try {
-                            var abc = JSON.parse(result.outBinds.response_data);
-                            console.log(abc.svsid);
-                            res.cookie('sesid', abc.sesid, {
-                                maxAge: 86400000
-                            });
-                            res.cookie('userid',abc.usrid, {
-                                maxAge: 86400000
-                            });
-                            res.writeHead(301, {
-                                Location: config.JobSeeker_URL
-                            });
-                            res.end();
-                    } catch (e) {
-                        console.log(e);
-                    }
+                    var abc = JSON.parse(result.outBinds.response_data);
+                    console.log(abc.svsid);
+                    res.cookie('sesid', abc.sesid, {
+                        maxAge: 86400000
+                    });
+                    res.cookie('userid',abc.usrid, {
+                        maxAge: 86400000
+                    });
+                    res.writeHead(301, {
+                        Location: '/'
+                    });
+                    res.end();
+                } catch (e) {
+                    console.log(e);
+                }
     
                 connection.close(function(err) {
                     if (err) {
                         console.log('Error closing connection', err);
                         console.log('-----------------------------------------');
                     }
+                });
             });
         });
-    });
     });
 });
 

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { TimeSheet, Date } from './timeSheet';
 import { NgbModal, NgbModalRef, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-timesheet',
@@ -20,7 +21,7 @@ export class TimesheetComponent implements OnInit {
   mode: string;
   id: string;
 
-  constructor(private modalService: NgbModal, private http: HttpClient, private ngbDateParserFormatter: NgbDateParserFormatter) {
+  constructor(private modalService: NgbModal,  private http: HttpClient,  private ngbDateParserFormatter: NgbDateParserFormatter) {
     this.options = 'HR';
     this.mode = 'Save';
     this.data = {
@@ -45,12 +46,13 @@ export class TimesheetComponent implements OnInit {
     }, err => {
       console.log(err);
     });
-    // .toPromise().then(res => {
-    //   this.timeSheet = res['data'];
-    // });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // if (!this.cookieService.check('sesid')) {
+    //   this.document.location.href = environment.redirectURL;
+    // }
+  }
 
   open(content, arg, d, t, i) {
     this.date = {

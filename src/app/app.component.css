@@ -1,3 +1,21 @@
 .nav {
  height: 100%;
 }
+
+li > a {
+    text-decoration: none;
+    color: black;
+}
+
+.selected {
+    background:#ECEEEE;
+    border-left: 2px solid black;
+}
+
+.nav-item:hover {
+    background:#ECEEEE;
+}
+
+.nav-item > a:hover {
+    color: black;
+}
